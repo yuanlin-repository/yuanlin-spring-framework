@@ -25,4 +25,9 @@ interface BeanDefinition {
     String getFactoryBeanName();
 
     void setFactoryBeanName(String factoryBeanName);
+
+    PropertyValues getPropertyValues();
+
+    void setPropertyValues(PropertyValues propertyValues);
+
 }

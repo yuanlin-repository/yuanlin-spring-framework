@@ -9,7 +9,7 @@ public class RootBeanDefinition implements BeanDefinition {
     /**
      * bean 的类型
      */
-    private Class beanClass;
+    private Class<?> beanClass;
     /**
      * bean 的全限定类名
      */
@@ -26,11 +26,18 @@ public class RootBeanDefinition implements BeanDefinition {
      * 该 bean 是 FactoryBean，其 FactoryBean 的名称
      */
     private String factoryBeanName;
+    /**
+     * 该 bean 需要注入的属性名称和注入的值
+     */
+    private PropertyValues propertyValues;
 
+    public Class<?> getBeanClass() {
+        return beanClass;
+    }
 
     @Override
     public String getBeanClassName() {
-        return beanClassName == null ? beanClassName : "";
+        return this.beanClassName == null ? this.beanClassName : "";
     }
 
     @Override
@@ -40,12 +47,12 @@ public class RootBeanDefinition implements BeanDefinition {
 
     @Override
     public Boolean isSingleton() {
-        return singleton;
+        return this.singleton;
     }
 
     @Override
     public Boolean isPrototype() {
-        return !singleton;
+        return !this.singleton;
     }
 
     @Override
@@ -55,7 +62,7 @@ public class RootBeanDefinition implements BeanDefinition {
 
     @Override
     public Boolean isLazyInit() {
-        return lazyInit;
+        return this.lazyInit;
     }
 
     @Override
@@ -65,11 +72,21 @@ public class RootBeanDefinition implements BeanDefinition {
 
     @Override
     public String getFactoryBeanName() {
-        return factoryBeanName == null ? factoryBeanName : "";
+        return this.factoryBeanName == null ? this.factoryBeanName : "";
     }
 
     @Override
     public void setFactoryBeanName(String factoryBeanName) {
         this.factoryBeanName = factoryBeanName;
+    }
+
+    @Override
+    public PropertyValues getPropertyValues() {
+        return this.propertyValues;
+    }
+
+    @Override
+    public void setPropertyValues(PropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
     }
 }
