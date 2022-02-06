@@ -11,5 +11,12 @@
 
     <artifactId>spring-framework</artifactId>
 
-
+    <dependencies>
+        <!-- cglib -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${version.cglib}</version>
+        </dependency>
+    </dependencies>
 </project>

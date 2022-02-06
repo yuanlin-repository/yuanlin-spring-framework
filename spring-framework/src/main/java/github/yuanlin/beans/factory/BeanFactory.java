@@ -31,6 +31,15 @@ public interface BeanFactory {
     <T> T getBean(Class<T> requiredType) throws BeansException;
 
     /**
+     * 根据名称和类型来获取 bean
+     * @param name bean 的名称
+     * @param requiredType bean 的类型
+     * @return bean 实例
+     * @throws BeansException 无法创建 bean 或者没有这个 bean 会抛出异常
+     */
+    <T> T getBean(String name, Class<T> requiredType) throws BeansException;
+
+    /**
      * 根据 bean 的名称判断一个 bean 是否是单例
      * @param name bean 的名称
      * @return bean 是否是单例

@@ -1,15 +1,16 @@
 package github.yuanlin.beans.factory;
 
 import github.yuanlin.beans.exception.BeansException;
+import github.yuanlin.beans.factory.lifecycle.processor.BeanPostProcessor;
 
 /**
- * bean 工厂接口（支持自动装配）
+ * bean 工厂接口（支持自动装配和对 BeanFactory 进行配置）
  * 目前只支持通过 bean 的名称进行自动装配
  *
  * @author yuanlin
  * @date 2022/02/05/20:39
  */
-public interface AutowireCapableBeanFactory extends BeanFactory {
+public interface AutowireCapableBeanFactory extends ListableBeanFactory {
 
     /**
      * 无自动装配
@@ -74,4 +75,27 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
      */
     Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
             throws BeansException;
+
+    /**
+     * 预初始化所有单例非懒加载 bean
+     * @throws BeansException 如果存在 bean 没办法被创建则抛出异常
+     */
+    void preInstantiateSingletons() throws BeansException;
+
+    /**
+     * 添加 BeanPostProcessor
+     * @param beanPostProcessor 要添加的 BeanPostProcessor 实例
+     */
+    void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
+
+    /**
+     * 返回 BeanFactory 中的 BeanPostProcessor 数量
+     * @return BeanPostProcessor 的数量
+     */
+    int getBeanPostProcessorCount();
+
+    /**
+     * 销毁所有的单例 bean
+     */
+    void destroySingletons();
 }

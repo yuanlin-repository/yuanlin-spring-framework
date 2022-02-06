@@ -13,5 +13,29 @@
         <module>spring-demo</module>
     </modules>
 
+    <properties>
+        <version.cglib>3.1</version.cglib>
+        <version.slf4j>1.7.25</version.slf4j>
+    </properties>
 
+    <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- log -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
+    </dependencies>
 </project>
