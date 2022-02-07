@@ -47,6 +47,11 @@ public class RootBeanDefinition implements BeanDefinition {
     @Override
     public void setBeanClassName(String beanClassName) {
         this.beanClassName = beanClassName;
+        try {
+            this.beanClass = Thread.currentThread().getContextClassLoader().loadClass(beanClassName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

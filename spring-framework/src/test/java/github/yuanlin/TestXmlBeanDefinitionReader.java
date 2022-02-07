@@ -12,7 +12,8 @@ import github.yuanlin.beans.factory.support.XmlBeanDefinitionReader;
 public class TestXmlBeanDefinitionReader {
 
     public static void main(String[] args) {
-        testLoadXmlFile();
+//        testLoadXmlFile();
+        testLoadByAnnotation();
     }
 
     /**
@@ -22,5 +23,14 @@ public class TestXmlBeanDefinitionReader {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
         reader.loadBeanDefinitions("spring.xml");
+    }
+
+    /**
+     * 测试通过注解配置
+     */
+    public static void testLoadByAnnotation() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions("spring-annotation.xml");
     }
 }

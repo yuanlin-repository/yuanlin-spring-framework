@@ -91,19 +91,31 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
     //---------------------------------------------------------------------
 
     public boolean containsBeanDefinition(String beanName) {
-        return false;
+        return beanDefinitionNames.contains(beanName);
     }
 
     public int getBeanDefinitionCount() {
-        return 0;
+        return beanDefinitionMap.size();
     }
 
     public String[] getBeanNamesForType(Class<?> type) {
-        return new String[0];
+        List<String> list = new ArrayList<>();
+        for (String beanDefinitionName : beanDefinitionNames) {
+            BeanDefinition beanDefinition = beanDefinitionMap.get(beanDefinitionName);
+            Class<?> beanClass = beanDefinition.getBeanClass();
+            if (type.isAssignableFrom(beanClass)) {
+                list.add(beanDefinitionName);
+            }
+        }
+        String[] result = new String[list.size()];
+        list.toArray(result);
+        return result;
     }
 
     public String[] getBeanDefinitionNames() {
-        return new String[0];
+        String[] result = new String[beanDefinitionNames.size()];
+        beanDefinitionNames.toArray(result);
+        return result;
     }
 
     public Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> annotationType) throws BeansException {

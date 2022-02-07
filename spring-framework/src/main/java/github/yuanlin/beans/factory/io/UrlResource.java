@@ -6,6 +6,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ * Resource 接口实现类
+ *
  * @author yuanlin
  * @date 2022/02/06/20:35
  */

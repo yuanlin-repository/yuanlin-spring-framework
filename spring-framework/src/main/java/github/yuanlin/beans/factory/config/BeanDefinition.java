@@ -8,6 +8,8 @@ package github.yuanlin.beans.factory.config;
  */
 public interface BeanDefinition {
 
+    Class<?> getBeanClass();
+
     String getBeanClassName();
 
     void setBeanClassName(String beanClassName);

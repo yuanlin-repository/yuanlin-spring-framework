@@ -4,6 +4,11 @@ import github.yuanlin.beans.exception.BeanDefinitionStoreException;
 import github.yuanlin.beans.factory.config.*;
 import github.yuanlin.beans.factory.io.Resource;
 import github.yuanlin.beans.factory.io.ResourceLoader;
+import github.yuanlin.context.annotation.Lazy;
+import github.yuanlin.context.annotation.Scope;
+import github.yuanlin.context.stereotype.Component;
+import github.yuanlin.context.stereotype.Repository;
+import github.yuanlin.context.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,7 +17,14 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * 读取 xml 文件加载 BeanDefinitions
@@ -22,6 +34,12 @@ import java.io.InputStream;
  */
 @Slf4j
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
+
+    public static final String FILE_PROTOCOL = "file";
+
+    public static final String JAR_PROTOCOL = "jar";
+
+    public static final String CLASS_SUFFIX = ".class";
 
     // xml element 标签
     public static final String COMPONENT_SCAN_ELEMENT = "component-scan";
@@ -34,7 +52,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     public static final String TX_ELEMENT = "tx";
 
-    // xml attribute value 标签
+    // xml attribute, value 标签
     public static final String BASE_PACKAGE_ATTRIBUTE = "base-package";
 
     // <bean/>
@@ -133,6 +151,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         }
     }
 
+
+    // ------------------------------
+    // 解析 xml 文件方法进行配置
+    // ------------------------------
     protected void parseElement(Element rootElement) {
         NodeList childNodes = rootElement.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
@@ -151,13 +173,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 }
             }
         }
-    }
-
-    /**
-     * 解析指定包下的注解配置
-     */
-    protected void parseAnnotation(String basePackage) {
-
     }
 
     private void processBeanDefinition(Element element) {
@@ -239,6 +254,142 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 }
             }
         }
+    }
+
+
+    // ------------------------------
+    // 注解方式进行配置
+    // ------------------------------
+    protected void parseAnnotation(String basePackage) {
+        // 处理多个包名的情况
+        String[] basePackages = basePackage.split(",");
+        for (int i = 0; i < basePackages.length; i++) {
+            basePackages[i] = basePackages[i].trim();
+        }
+        // 扫描包，获取包下的所有 Class
+        Set<Class<?>> classes = new LinkedHashSet<>();
+        for (String packagePath: basePackages) {
+            Set<Class<?>> subClasses = getClasses(packagePath);
+            classes.addAll(subClasses);
+        }
+        parseAnnotationBeanDefinition(classes);
+    }
+
+    private Set<Class<?>> getClasses(String packagePath) {
+        Set<Class<?>> classes = new LinkedHashSet<>();
+        // github.yuanlin.service -> github/yuanlin/service
+        String packageDir = packagePath.replace(".", "/");
+        Enumeration<URL> dirs;
+        try {
+            dirs = Thread.currentThread().getContextClassLoader().getResources(packageDir);
+            while (dirs.hasMoreElements()) {
+                URL url = dirs.nextElement();
+                String protocol = url.getProtocol();
+                if (FILE_PROTOCOL.equals(protocol)) {
+                    // 对文件路径进行解码: 解决中文乱码问题
+                    String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
+                    findAndAddClassesInPackage(packagePath, filePath, classes);
+                } else if (JAR_PROTOCOL.equals(protocol)) {
+                    // TODO
+                } else {
+                    log.error("Unsupported protocol type: [{}], url: [{}]", protocol, url);
+                }
+            }
+        } catch (IOException e) {
+            log.error("load resource error: [{}]", packageDir, e);
+        }
+        return classes;
+    }
+
+    private void findAndAddClassesInPackage(String packagePath, String filePath, Set<Class<?>> classes) {
+        File file = new File(filePath);
+        // 路径不存在直接返回
+        if (!file.exists() || !file.isDirectory()) {
+            return;
+        }
+        for (File tFile : file.listFiles()) {
+            if (tFile.isDirectory()) {
+                findAndAddClassesInPackage(packagePath + "." + tFile.getName(),
+                        tFile.getAbsolutePath(), classes);
+            } else {
+                if (tFile.getName().endsWith(CLASS_SUFFIX)) {
+                    String className = tFile.getName().
+                            substring(0, tFile.getName().length() - CLASS_SUFFIX.length());
+                    try {
+                        Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(packagePath + "." + className);
+                        classes.add(clazz);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    private void parseAnnotationBeanDefinition(Set<Class<?>> classes) {
+        for (Class<?> clazz : classes) {
+            if (clazz.isInterface()) {
+                continue;
+            }
+            if (isComponent(clazz)) {
+                BeanDefinitionHolder beanDefinitionHolder = parseAnnotationBeanDefinition(clazz);
+                getRegistry().registerBeanDefinition(beanDefinitionHolder.getBeanName(), beanDefinitionHolder.getBeanDefinition());
+            }
+        }
+    }
+
+    private BeanDefinitionHolder parseAnnotationBeanDefinition(Class<?> clazz) {
+        BeanDefinition beanDefinition = new RootBeanDefinition();
+        String beanName = getComponentName(clazz);
+        String className = clazz.getName();
+        boolean singleton = true;
+        boolean lazyInit = false;
+        if (clazz.getAnnotation(Lazy.class) != null) {
+            lazyInit = clazz.getAnnotation(Lazy.class).value();
+        }
+        if (clazz.getAnnotation(Scope.class) != null) {
+            if (PROTOTYPE_VALUE.equals(clazz.getAnnotation(Scope.class).scopeName())) {
+                singleton = false;
+            }
+        }
+        beanDefinition.setBeanClassName(className);
+        beanDefinition.setSingleton(singleton);
+        beanDefinition.setLazyInit(lazyInit);
+        return new BeanDefinitionHolder(beanName, beanDefinition);
+    }
+
+    private boolean isComponent(Class<?> clazz) {
+        if (clazz.isAnnotationPresent(Component.class) ||
+            clazz.isAnnotationPresent(Service.class) ||
+            clazz.isAnnotationPresent(Repository.class)) {
+            return true;
+        }
+        return false;
+    }
+
+    private String getComponentName(Class<?> clazz) {
+        String beanName = "";
+        if (clazz.isAnnotationPresent(Component.class)) {
+            beanName = clazz.getAnnotation(Component.class).name();
+        }
+        else if (clazz.isAnnotationPresent(Service.class)) {
+            beanName = clazz.getAnnotation(Service.class).name();
+        }
+        else if (clazz.isAnnotationPresent(Repository.class)) {
+            beanName = clazz.getAnnotation(Repository.class).name();
+        }
+        if ("".equals(beanName)) {
+            beanName = getSimpleName(clazz);
+        }
+        return beanName;
+    }
+
+    private String getSimpleName(Class<?> clazz) {
+        StringBuilder builder = new StringBuilder(clazz.getInterfaces()[0].getSimpleName());
+        // 将首字母转为小写
+        // HelloService -> helloService
+        builder.setCharAt(0, (char) (builder.charAt(0) + 32));
+        return builder.toString();
     }
 
     /**
