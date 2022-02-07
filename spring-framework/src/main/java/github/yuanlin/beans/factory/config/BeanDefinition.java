@@ -6,7 +6,7 @@ package github.yuanlin.beans.factory.config;
  * @author yuanlin
  * @date 2022/02/05/20:42
  */
-interface BeanDefinition {
+public interface BeanDefinition {
 
     String getBeanClassName();
 
@@ -30,4 +30,5 @@ interface BeanDefinition {
 
     void setPropertyValues(PropertyValues propertyValues);
 
+    boolean validate();
 }

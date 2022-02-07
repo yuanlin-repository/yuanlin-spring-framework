@@ -1,6 +1,8 @@
 package github.yuanlin.beans.factory;
 
 import github.yuanlin.beans.exception.BeansException;
+import github.yuanlin.beans.factory.config.BeanDefinition;
+import github.yuanlin.beans.factory.config.BeanDefinitionHolder;
 import github.yuanlin.beans.factory.lifecycle.processor.BeanPostProcessor;
 
 /**
@@ -87,6 +89,12 @@ public interface AutowireCapableBeanFactory extends ListableBeanFactory {
      * @param beanPostProcessor 要添加的 BeanPostProcessor 实例
      */
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
+
+    /**
+     * 注册 beanDefinition
+     * @param beanName 要注册的 beanName
+     */
+    void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
 
     /**
      * 返回 BeanFactory 中的 BeanPostProcessor 数量

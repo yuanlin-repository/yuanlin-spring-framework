@@ -5,12 +5,12 @@ import github.yuanlin.beans.exception.BeansException;
 import github.yuanlin.beans.factory.AutowireCapableBeanFactory;
 import github.yuanlin.beans.factory.ListableBeanFactory;
 import github.yuanlin.beans.factory.config.BeanDefinition;
+import github.yuanlin.beans.factory.config.BeanDefinitionHolder;
 import github.yuanlin.beans.factory.lifecycle.processor.BeanPostProcessor;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -22,9 +22,40 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory {
 
     /**
+     * 存储 key -> value : beanName -> BeanDefinition
+     */
+    protected final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+
+    /**
+     * 存储所有 BeanDefinition 对应 bean 的名称
+     */
+    protected List<String> beanDefinitionNames = new ArrayList<>(256);
+
+    /**
+     * 存储 key -> value : beanName -> bean
+     */
+    protected final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
+
+    /**
+     * 存储单例 bean 的名称
+     */
+    protected final Set<String> registeredSingletons = new LinkedHashSet<>(256);
+
+    /**
+     * 存储早期 bean 实例（这里是用来解决循环依赖问题）
+     * key -> value : beanName -> earlyBean（未完成创建的 bean 实例）
+     */
+    protected final Map<String, Object> earlySingletonObjects = new HashMap<>(16);
+
+    /**
+     * 存储正在创建中的 bean 实例的名称
+     */
+    protected final Set<String> singletonsCurrentlyInCreation = Collections.newSetFromMap(new ConcurrentHashMap<>(16));
+
+    /**
      * 存储所有注册的 BeanPostProcessor
      */
-    private List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
+    protected List<BeanPostProcessor> beanPostProcessors = new BeanPostProcessorCacheAwareList();
 
     public AbstractBeanFactory() {
     }
@@ -59,25 +90,25 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
     // ListableBeanFactory 接口实现
     //---------------------------------------------------------------------
 
-//    public boolean containsBeanDefinition(String beanName) {
-//        return false;
-//    }
-//
-//    public int getBeanDefinitionCount() {
-//        return 0;
-//    }
-//
-//    public String[] getBeanNamesForType(Class<?> type) {
-//        return new String[0];
-//    }
-//
-//    public String[] getBeanDefinitionNames() {
-//        return new String[0];
-//    }
-//
-//    public Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> annotationType) throws BeansException {
-//        return null;
-//    }
+    public boolean containsBeanDefinition(String beanName) {
+        return false;
+    }
+
+    public int getBeanDefinitionCount() {
+        return 0;
+    }
+
+    public String[] getBeanNamesForType(Class<?> type) {
+        return new String[0];
+    }
+
+    public String[] getBeanDefinitionNames() {
+        return new String[0];
+    }
+
+    public Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> annotationType) throws BeansException {
+        return null;
+    }
 
     //---------------------------------------------------------------------
     // BeanFactory 接口实现
@@ -88,6 +119,10 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
     }
 
     public <T> T getBean(Class<T> requiredType) throws BeansException {
+        return null;
+    }
+
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
         return null;
     }
 
@@ -103,6 +138,15 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
      */
     protected BeanWrapper instantiateBean(String beanName, BeanDefinition mbd) {
         return null;
+    }
+
+    /**
+     * 注册 BeanDefinition
+     */
+    public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
+        beanDefinition.validate();
+        beanDefinitionMap.put(beanName, beanDefinition);
+        beanDefinitionNames.add(beanName);
     }
 
     private class BeanPostProcessorCacheAwareList extends CopyOnWriteArrayList<BeanPostProcessor> {

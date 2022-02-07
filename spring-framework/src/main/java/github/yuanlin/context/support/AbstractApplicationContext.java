@@ -25,7 +25,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
     /**
      * BeanFactory
      */
-    private DefaultListableBeanFactory beanFactory;
+    protected DefaultListableBeanFactory beanFactory;
 
     /**
      * 保证 refresh 和 destroy 方法执行时的线程安全
@@ -127,7 +127,13 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
      * @return 当前上下文的 BeanFactory
      * @throws IllegalStateException 如果 BeanFactory 为 null，或者没有 BeanFactory，抛出异常
      */
-    public abstract AutowireCapableBeanFactory getBeanFactory() throws IllegalStateException;
+    public AutowireCapableBeanFactory getBeanFactory() throws IllegalStateException {
+        if (this.beanFactory != null) {
+            return this.beanFactory;
+        } else {
+            throw new IllegalStateException("no beanFactory exists");
+        }
+    }
 
     /**
      * 刷新 BeanFactory，注册 BeanDefinitions 到 BeanFactory 中

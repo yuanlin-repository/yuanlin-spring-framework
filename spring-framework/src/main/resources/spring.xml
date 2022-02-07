@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="helloService" class="github.yuanlin.service.HelloServiceImpl" scope="prototype">
+        <property name="text" value="hello~"></property>
+    </bean>
+
+</beans>

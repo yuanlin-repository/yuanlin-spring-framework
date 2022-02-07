@@ -31,6 +31,10 @@ public class RootBeanDefinition implements BeanDefinition {
      */
     private PropertyValues propertyValues;
 
+    public RootBeanDefinition() {
+        propertyValues = new PropertyValues();
+    }
+
     public Class<?> getBeanClass() {
         return beanClass;
     }
@@ -88,5 +92,13 @@ public class RootBeanDefinition implements BeanDefinition {
     @Override
     public void setPropertyValues(PropertyValues propertyValues) {
         this.propertyValues = propertyValues;
+    }
+
+    @Override
+    public boolean validate() {
+        if (beanClassName != null) {
+            return true;
+        }
+        return false;
     }
 }
