@@ -1,6 +1,9 @@
 package github.yuanlin.beans.factory.support;
 
 import github.yuanlin.beans.exception.BeanDefinitionStoreException;
+import github.yuanlin.beans.factory.annotation.Autowired;
+import github.yuanlin.beans.factory.annotation.Qualifier;
+import github.yuanlin.beans.factory.annotation.Value;
 import github.yuanlin.beans.factory.config.*;
 import github.yuanlin.beans.factory.io.Resource;
 import github.yuanlin.beans.factory.io.ResourceLoader;
@@ -20,6 +23,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Enumeration;
@@ -108,7 +112,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         try (InputStream inputStream = resource.getInputStream()) {
             count = doLoadBeanDefinitions(inputStream);
         } catch (Exception e) {
-            throw new BeanDefinitionStoreException("Exception parsing XML document: [" + location + "]");
+            throw new BeanDefinitionStoreException("Exception parsing XML document: [" + location + "]", e);
         }
         return count;
     }
@@ -355,7 +359,40 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         beanDefinition.setBeanClassName(className);
         beanDefinition.setSingleton(singleton);
         beanDefinition.setLazyInit(lazyInit);
+        processPropertyAnnotation(clazz, beanDefinition);
         return new BeanDefinitionHolder(beanName, beanDefinition);
+    }
+
+    private void processPropertyAnnotation(Class<?> clazz, BeanDefinition beanDefinition) {
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (Field field : declaredFields) {
+            if (field.isAnnotationPresent(Autowired.class)) {
+                String name = field.getName();
+                if (field.isAnnotationPresent(Qualifier.class)) {
+                    Qualifier qualifier = field.getAnnotation(Qualifier.class);
+                    String ref = qualifier.value();
+                    if ("".equals(ref)) {
+                        continue;
+                    }
+                    RuntimeBeanReference beanReference = new RuntimeBeanReference(ref);
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, beanReference));
+                }
+                else {
+                    String ref = getSimpleName(field.getType());
+                    RuntimeBeanReference beanReference = new RuntimeBeanReference(ref);
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, beanReference));
+                }
+            }
+            else if (field.isAnnotationPresent(Value.class)) {
+                String name = field.getName();
+                Value valueAnnotation = field.getAnnotation(Value.class);
+                String value = valueAnnotation.value();
+                if ("".equals(value)) {
+                    continue;
+                }
+                beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
+            }
+        }
     }
 
     private boolean isComponent(Class<?> clazz) {
@@ -379,13 +416,21 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             beanName = clazz.getAnnotation(Repository.class).name();
         }
         if ("".equals(beanName)) {
-            beanName = getSimpleName(clazz);
+            beanName = getSimpleNameForImpl(clazz);
         }
         return beanName;
     }
 
-    private String getSimpleName(Class<?> clazz) {
+    private String getSimpleNameForImpl(Class<?> clazz) {
         StringBuilder builder = new StringBuilder(clazz.getInterfaces()[0].getSimpleName());
+        // 将首字母转为小写
+        // HelloService -> helloService
+        builder.setCharAt(0, (char) (builder.charAt(0) + 32));
+        return builder.toString();
+    }
+
+    private String getSimpleName(Class<?> clazz) {
+        StringBuilder builder = new StringBuilder(clazz.getSimpleName());
         // 将首字母转为小写
         // HelloService -> helloService
         builder.setCharAt(0, (char) (builder.charAt(0) + 32));

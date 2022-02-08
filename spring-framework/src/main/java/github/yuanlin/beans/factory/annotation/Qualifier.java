@@ -6,12 +6,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * @Qualifier 注解，用于 @Autowire 注入时接口有多个实现类的情况（指定注入的实现类 name）
+ *
  * @author yuanlin
- * @date 2022/02/05/20:51
+ * @date 2022/02/08/15:51
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Value {
+public @interface Qualifier {
 
-    public String value() default "";
+    String value() default "";
 }
