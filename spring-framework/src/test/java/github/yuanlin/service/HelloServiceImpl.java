@@ -11,7 +11,6 @@ import github.yuanlin.context.stereotype.Component;
  * @author yuanlin
  * @date 2022/02/07/16:23
  */
-@Lazy
 @Scope(scopeName = "singleton")
 @Component
 public class HelloServiceImpl implements HelloService {
@@ -20,11 +19,12 @@ public class HelloServiceImpl implements HelloService {
     private String text;
 
     @Autowired
-    @Qualifier("hiService01")
+    @Qualifier("hiService")
     private HiService hiService;
 
     @Override
     public void hello() {
         System.out.println(text);
+        hiService.hi();
     }
 }

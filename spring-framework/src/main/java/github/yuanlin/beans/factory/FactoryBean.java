@@ -20,4 +20,12 @@ public interface FactoryBean<T> {
      * @return bean 实例的类型
      */
     Class<?> getObjectType();
+
+    /**
+     * 该 FactoryBean 生产的实例是否是单例
+     * @return 默认是单例
+     */
+    default boolean isSingleton() {
+        return true;
+    }
 }

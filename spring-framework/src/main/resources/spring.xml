@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+    <bean id="hiService" class="github.yuanlin.service.HiServiceImpl" scope="singleton"/>
 
-    <bean id="helloService" class="github.yuanlin.service.HelloServiceImpl" scope="prototype">
+    <bean id="helloService" class="github.yuanlin.service.HelloServiceImpl" scope="singleton">
         <property name="text" value="hello~"></property>
+        <property name="hiService" ref="hiService"/>
     </bean>
-
+    <bean id="testFactoryBean" class="github.yuanlin.service.TestFactoryBean" scope="singleton"/>
 </beans>

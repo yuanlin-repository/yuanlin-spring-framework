@@ -1,6 +1,7 @@
 package github.yuanlin.beans.factory.support;
 
 import github.yuanlin.beans.exception.BeanDefinitionStoreException;
+import github.yuanlin.beans.factory.FactoryBean;
 import github.yuanlin.beans.factory.annotation.Autowired;
 import github.yuanlin.beans.factory.annotation.Qualifier;
 import github.yuanlin.beans.factory.annotation.Value;
@@ -416,7 +417,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             beanName = clazz.getAnnotation(Repository.class).name();
         }
         if ("".equals(beanName)) {
-            beanName = getSimpleNameForImpl(clazz);
+            if (FactoryBean.class.isAssignableFrom(clazz)) {
+                beanName = getSimpleName(clazz);
+            } else {
+                beanName = getSimpleNameForImpl(clazz);
+            }
         }
         return beanName;
     }

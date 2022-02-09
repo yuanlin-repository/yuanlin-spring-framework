@@ -12,8 +12,8 @@ import github.yuanlin.beans.factory.support.XmlBeanDefinitionReader;
 public class TestXmlBeanDefinitionReader {
 
     public static void main(String[] args) {
-//        testLoadXmlFile();
-        testLoadByAnnotation();
+        testLoadXmlFile();
+//        testLoadByAnnotation();
     }
 
     /**
