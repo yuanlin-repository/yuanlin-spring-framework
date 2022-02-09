@@ -8,6 +8,10 @@ import github.yuanlin.beans.factory.config.BeanDefinition;
 import github.yuanlin.beans.factory.config.PropertyValue;
 import github.yuanlin.beans.factory.config.PropertyValues;
 import github.yuanlin.beans.factory.config.RuntimeBeanReference;
+import github.yuanlin.beans.factory.lifecycle.InitializingBean;
+import github.yuanlin.beans.factory.lifecycle.aware.Aware;
+import github.yuanlin.beans.factory.lifecycle.aware.BeanFactoryAware;
+import github.yuanlin.beans.factory.lifecycle.aware.BeanNameAware;
 import github.yuanlin.beans.factory.lifecycle.processor.BeanPostProcessor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -118,16 +122,63 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
         return this.singletonsCurrentlyInCreation.contains(beanName);
     }
 
-    public Object initializeBean(Object existingBean, String beanName) throws BeansException {
-        return existingBean;
+    public Object initializeBean(Object bean, String beanName) throws BeansException {
+        invokeAwareMethods(beanName, bean);
+        Object wrappedBean = bean;
+        wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+        try {
+            invokeInitMethods(wrappedBean, beanName);
+        } catch (Exception e) {
+            log.error("invoke afterProperties method error, beanName: [{}]", beanName, e);
+            throw new BeanCreationException("invoke afterProperties method error, beanName: [" + beanName + "]");
+        }
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        return wrappedBean;
     }
 
-    public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException {
-        return existingBean;
+    private void invokeInitMethods(Object bean, String beanName) throws Exception {
+        if (bean instanceof InitializingBean) {
+            ((InitializingBean) bean).afterPropertiesSet();
+        }
     }
 
-    public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException {
-        return existingBean;
+    private void invokeAwareMethods(String beanName, Object bean) {
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+        }
+    }
+
+    public Object applyBeanPostProcessorsBeforeInitialization(Object bean, String beanName) throws BeansException {
+        Object result = bean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessBeforeInitialization(result, beanName);
+            if (current == null) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
+
+    public Object applyBeanPostProcessorsAfterInitialization(Object bean, String beanName) throws BeansException {
+        Object result = bean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessAfterInitialization(result, beanName);
+            if (current == null) {
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
     }
 
     public abstract void destroySingletons();
@@ -335,7 +386,6 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
     private boolean isFactoryDereference(String beanName) {
         return (beanName != null && beanName.startsWith(FACTORY_BEAN_PREFIX));
     }
-
 
     private Object getSingleton(String beanName) {
         if (singletonObjects.containsKey(beanName)) {

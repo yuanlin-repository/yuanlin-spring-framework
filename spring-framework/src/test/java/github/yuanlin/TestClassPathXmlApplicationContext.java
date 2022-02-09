@@ -2,6 +2,7 @@ package github.yuanlin;
 
 import github.yuanlin.context.ApplicationContext;
 import github.yuanlin.context.support.ClassPathXmlApplicationContext;
+import github.yuanlin.lifecycle.TestLifeCycle;
 import github.yuanlin.model.Student;
 import github.yuanlin.service.HelloService;
 import github.yuanlin.service.HiService;
@@ -20,7 +21,8 @@ public class TestClassPathXmlApplicationContext {
 //        testGetBeanConfigureThroughAnnotation();
 //        testFactoryBeanConfigureThroughAnnotation();
 //        testFactoryBeanConfigureThroughXmlFile();
-        testCircularReference();
+//        testCircularReference();
+        testLifeCycle();
     }
 
     public static void testGetBeanConfigureThroughXmlFile() {
@@ -63,5 +65,10 @@ public class TestClassPathXmlApplicationContext {
         helloService.hello();
         HiService hiService = (HiService) applicationContext.getBean("hiService");
         System.out.println("test finish..");
+    }
+
+    public static void testLifeCycle() {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring.xml");
+        TestLifeCycle testLifeCycle = (TestLifeCycle) applicationContext.getBean("testLifeCycle");
     }
 }

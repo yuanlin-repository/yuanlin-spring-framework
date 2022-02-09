@@ -60,7 +60,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class);
         List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
         for (String ppName : postProcessorNames) {
-            BeanPostProcessor bean = beanFactory.getBean(ppName, BeanPostProcessor.class);
+            BeanPostProcessor bean = (BeanPostProcessor) beanFactory.getBean(ppName);
             beanPostProcessors.add(bean);
         }
         for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {

@@ -8,5 +8,9 @@
         <property name="text" value="hello~"></property>
         <property name="hiService" ref="hiService"/>
     </bean>
+
     <bean id="testFactoryBean" class="github.yuanlin.service.TestFactoryBean" scope="singleton"/>
+
+    <bean id="testPostProcessor" class="github.yuanlin.lifecycle.TestPostProcessor" scope="singleton"/>
+    <bean id="testLifeCycle" class="github.yuanlin.lifecycle.TestLifeCycle" scope="singleton"/>
 </beans>
