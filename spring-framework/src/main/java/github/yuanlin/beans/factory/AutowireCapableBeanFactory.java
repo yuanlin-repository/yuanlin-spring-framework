@@ -31,11 +31,12 @@ public interface AutowireCapableBeanFactory extends ListableBeanFactory {
 
     /**
      * 创建一个新的 bean 实例
-     * @param beanClass bean 的类型
+     * @param beanName bean 的名称
+     * @param beanDefinition bean 的配置信息
      * @return bean 实例
-     * @throws BeansException 实例化失败或者依赖注入失败
+     * @throws BeansException 创建 bean 失败抛出异常
      */
-    <T> T createBean(Class<T> beanClass) throws BeansException;
+    Object createBean(String beanName, BeanDefinition beanDefinition) throws BeansException;
 
     /**
      * 在这个方法中会执行 bean 生命周期的一些操作

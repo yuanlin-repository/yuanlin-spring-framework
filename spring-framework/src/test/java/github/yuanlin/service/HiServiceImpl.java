@@ -1,5 +1,6 @@
 package github.yuanlin.service;
 
+import github.yuanlin.beans.factory.annotation.Autowired;
 import github.yuanlin.context.stereotype.Component;
 
 /**
@@ -8,6 +9,9 @@ import github.yuanlin.context.stereotype.Component;
  */
 @Component
 public class HiServiceImpl implements HiService {
+
+    @Autowired
+    private HelloService helloService;
 
     @Override
     public void hi() {

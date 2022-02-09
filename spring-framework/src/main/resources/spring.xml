@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="hiService" class="github.yuanlin.service.HiServiceImpl" scope="singleton"/>
+    <bean id="hiService" class="github.yuanlin.service.HiServiceImpl" scope="singleton">
+        <property name="helloService" ref="helloService"/>
+    </bean>
 
     <bean id="helloService" class="github.yuanlin.service.HelloServiceImpl" scope="singleton">
         <property name="text" value="hello~"></property>

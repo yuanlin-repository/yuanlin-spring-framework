@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DefaultListableBeanFactory extends AbstractBeanFactory {
 
-    // TODO 初始化所有 bean
+    // 初始化所有 bean
     @Override
     public void preInstantiateSingletons() throws BeansException {
         List<String> beanNames = new ArrayList<>(beanDefinitionNames);
@@ -37,7 +37,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
     }
 
     @Override
-    protected Object createBean(String beanName, BeanDefinition beanDefinition) throws BeanCreationException {
+    public Object createBean(String beanName, BeanDefinition beanDefinition) throws BeanCreationException {
         // 实例化 bean
         Object instantiateBean = instantiateBean(beanName, beanDefinition);
         // 注入 bean 的属性
