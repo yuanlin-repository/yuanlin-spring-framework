@@ -4,7 +4,7 @@ package github.yuanlin.beans.factory.config;
  * @author yuanlin
  * @date 2022/02/05/21:49
  */
-public class RootBeanDefinition implements BeanDefinition {
+public class GenericBeanDefinition implements BeanDefinition {
 
     /**
      * bean 的类型
@@ -31,7 +31,7 @@ public class RootBeanDefinition implements BeanDefinition {
      */
     private PropertyValues propertyValues;
 
-    public RootBeanDefinition() {
+    public GenericBeanDefinition() {
         propertyValues = new PropertyValues();
     }
 

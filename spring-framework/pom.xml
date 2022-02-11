@@ -18,5 +18,17 @@
             <artifactId>cglib</artifactId>
             <version>${version.cglib}</version>
         </dependency>
+        <!-- aspectj -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${version.aspectjweaver}</version>
+        </dependency>
+        <!-- aopalliance -->
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>${version.aopalliance}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -215,7 +215,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 lazyInit = true;
             }
         }
-        BeanDefinition beanDefinition = new RootBeanDefinition();
+        BeanDefinition beanDefinition = new GenericBeanDefinition();
         beanDefinition.setBeanClassName(className);
         beanDefinition.setSingleton(singleton);
         beanDefinition.setLazyInit(lazyInit);
@@ -344,7 +344,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     private BeanDefinitionHolder parseAnnotationBeanDefinition(Class<?> clazz) {
-        BeanDefinition beanDefinition = new RootBeanDefinition();
+        BeanDefinition beanDefinition = new GenericBeanDefinition();
         String beanName = getComponentName(clazz);
         String className = clazz.getName();
         boolean singleton = true;

@@ -14,8 +14,14 @@
     </modules>
 
     <properties>
+        <encoding>UTF-8</encoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <version.checkstyle-maven-plugin>3.1.1</version.checkstyle-maven-plugin>
         <version.cglib>3.1</version.cglib>
         <version.slf4j>1.7.25</version.slf4j>
+        <version.aspectjweaver>1.9.7</version.aspectjweaver>
+        <version.aopalliance>1.0</version.aopalliance>
     </properties>
 
     <dependencies>
@@ -38,4 +44,34 @@
             <version>${version.slf4j}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${encoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.checkstyle-maven-plugin}</version>
+                <configuration>
+                    <configLocation>config/checkstyle.xml</configLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
