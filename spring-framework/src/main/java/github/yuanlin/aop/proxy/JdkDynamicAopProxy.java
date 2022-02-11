@@ -1,5 +1,7 @@
 package github.yuanlin.aop.proxy;
 
+import github.yuanlin.aop.AdvisedSupport;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -10,6 +12,10 @@ import java.lang.reflect.Method;
  * @date 2022/02/11/12:06
  */
 public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
+
+    public JdkDynamicAopProxy(AdvisedSupport config) {
+
+    }
 
     @Override
     public Object getProxy() {

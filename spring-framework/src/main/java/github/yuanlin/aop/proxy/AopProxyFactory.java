@@ -16,6 +16,6 @@ public interface AopProxyFactory {
      * @return 代理对象
      * @throws Throwable 如果 AOP 配置无效
      */
-    AopProxy createAopProxy(AdvisedSupport config) throws Throwable;
+    AopProxy createAopProxy(AdvisedSupport config) throws RuntimeException;
 
 }

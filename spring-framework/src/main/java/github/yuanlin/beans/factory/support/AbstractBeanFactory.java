@@ -316,7 +316,7 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
         if (isFactoryDereference(beanName)) {
             if (!(beanInstance instanceof FactoryBean)) {
                 throw new BeanIsNotAFactoryException(
-                        "BeanInstance class: " + '[' + beanInstance.getClass() + ']' + "target class: "+ '[' + FactoryBean.class.getName() + ']');
+                        "BeanInstance class: " + '[' + beanInstance.getClass() + ']' + "targetsource class: "+ '[' + FactoryBean.class.getName() + ']');
             }
             return beanInstance;
         }
