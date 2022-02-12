@@ -1,6 +1,5 @@
 package github.yuanlin.beans.factory.support;
 
-import github.yuanlin.beans.BeanWrapper;
 import github.yuanlin.beans.exception.BeanCreationException;
 import github.yuanlin.beans.exception.BeansException;
 import github.yuanlin.beans.exception.NoSuchBeanDefinitionException;

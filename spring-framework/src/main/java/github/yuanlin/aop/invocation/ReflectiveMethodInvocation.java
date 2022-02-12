@@ -35,7 +35,9 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation {
      * 对方法进行增强的方法拦截器
      */
     protected final List<?> interceptors;
-
+    /**
+     * 拦截器下标索引
+     */
     private int currentInterceptorIndex = -1;
 
     public ReflectiveMethodInvocation(Object proxy, Object target, Method method, Object[] arguments,

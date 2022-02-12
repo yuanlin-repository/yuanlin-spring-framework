@@ -5,7 +5,7 @@ import github.yuanlin.aop.advice.interceptor.AfterReturningAdviceInterceptor;
 import github.yuanlin.aop.advice.interceptor.MethodBeforeAdviceInterceptor;
 import github.yuanlin.aop.advice.interceptor.ThrowsAdviceInterceptor;
 import github.yuanlin.aop.advisor.Advisor;
-import github.yuanlin.aop.pointcutadvisor.PointcutAdvisor;
+import github.yuanlin.aop.advisor.PointcutAdvisor;
 import github.yuanlin.aop.targetsource.EmptyTargetSource;
 import github.yuanlin.aop.advice.interceptor.MethodInterceptor;
 

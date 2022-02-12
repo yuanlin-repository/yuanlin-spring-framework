@@ -8,16 +8,16 @@
     <bean id="logResultAdvice" class="github.yuanlin.advice.LogResultAdvice"/>
     <bean id="logThrowsAdvice" class="github.yuanlin.advice.LogThrowsAdvice"/>
 
-    <bean id="logArgsAdvisor" class="github.yuanlin.aop.pointcutadvisor.AspectJExpressionPointcutAdvisor">
+    <bean id="logArgsAdvisor" class="github.yuanlin.aop.advisor.AspectJExpressionPointcutAdvisor">
         <property name="advice" ref="logArgsAdvice" />
         <property name="expression" value="execution(* github.yuanlin.service.UserService.*(..))" />
     </bean>
     <!--记录 query* 的返回值-->
-    <bean id="logResultAdvisor" class="github.yuanlin.aop.pointcutadvisor.AspectJExpressionPointcutAdvisor">
+    <bean id="logResultAdvisor" class="github.yuanlin.aop.advisor.AspectJExpressionPointcutAdvisor">
         <property name="advice" ref="logResultAdvice" />
         <property name="expression" value="execution(* github.yuanlin.service.UserService.*(..))" />
     </bean>
-    <bean id="logThrowsAdvisor" class="github.yuanlin.aop.pointcutadvisor.AspectJExpressionPointcutAdvisor">
+    <bean id="logThrowsAdvisor" class="github.yuanlin.aop.advisor.AspectJExpressionPointcutAdvisor">
         <property name="advice" ref="logThrowsAdvice" />
         <property name="expression" value="execution(* github.yuanlin.service.UserService.*(..))" />
     </bean>

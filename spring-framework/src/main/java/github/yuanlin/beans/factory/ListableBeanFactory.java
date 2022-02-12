@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
- * 提供对 BeanFactory 的集合操作
+ * 提供获取 bean 集合的操作
  *
  * @author yuanlin
  * @date 2022/02/05/20:33

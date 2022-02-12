@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 方法抛出异常拦截器
+ *
  * @author yuanlin
  * @date 2022/02/11/21:55
  */

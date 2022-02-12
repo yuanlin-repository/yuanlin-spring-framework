@@ -5,7 +5,7 @@ import github.yuanlin.aop.MethodMatcher;
 import github.yuanlin.aop.TargetSource;
 import github.yuanlin.aop.advisor.Advisor;
 import github.yuanlin.aop.pointcut.Pointcut;
-import github.yuanlin.aop.pointcutadvisor.PointcutAdvisor;
+import github.yuanlin.aop.advisor.PointcutAdvisor;
 import github.yuanlin.beans.exception.BeansException;
 import github.yuanlin.beans.factory.AutowireCapableBeanFactory;
 import github.yuanlin.beans.factory.BeanFactory;

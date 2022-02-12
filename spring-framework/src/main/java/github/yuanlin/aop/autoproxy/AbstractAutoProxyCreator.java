@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 自动代理创建者抽象类
+ *
  * @author yuanlin
  * @date 2022/02/11/13:16
  */

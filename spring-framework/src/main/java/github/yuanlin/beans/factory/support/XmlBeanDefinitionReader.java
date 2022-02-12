@@ -102,7 +102,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         return count;
     }
 
-    // TODO 读取文件加载注册 BeanDefinition
     @Override
     public int loadBeanDefinitions(String location) throws BeanDefinitionStoreException {
         log.info("loading the file under: [{}]", location);

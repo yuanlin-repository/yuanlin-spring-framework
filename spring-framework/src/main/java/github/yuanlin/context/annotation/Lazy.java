@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 标注 bean 是否懒加载
+ *
  * @author yuanlin
  * @date 2022/02/05/20:53
  */

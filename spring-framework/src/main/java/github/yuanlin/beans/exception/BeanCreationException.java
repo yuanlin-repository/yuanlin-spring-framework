@@ -1,6 +1,8 @@
 package github.yuanlin.beans.exception;
 
 /**
+ * bean 创建异常
+ *
  * @author yuanlin
  * @date 2022/02/08/17:35
  */

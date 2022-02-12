@@ -5,6 +5,8 @@ import github.yuanlin.aop.advice.AfterReturningAdvice;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
+ * 方法执行成功后拦截器
+ *
  * @author yuanlin
  * @date 2022/02/11/21:55
  */

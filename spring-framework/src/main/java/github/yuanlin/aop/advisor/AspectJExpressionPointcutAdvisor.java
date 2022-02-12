@@ -1,4 +1,4 @@
-package github.yuanlin.aop.pointcutadvisor;
+package github.yuanlin.aop.advisor;
 
 import github.yuanlin.aop.advice.Advice;
 import github.yuanlin.aop.pointcut.AspectJExpressionPointcut;

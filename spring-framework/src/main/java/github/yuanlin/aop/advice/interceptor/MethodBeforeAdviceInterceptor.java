@@ -5,6 +5,8 @@ import github.yuanlin.aop.advice.MethodBeforeAdvice;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
+ * 方法执行前拦截器
+ *
  * @author yuanlin
  * @date 2022/02/11/20:32
  */

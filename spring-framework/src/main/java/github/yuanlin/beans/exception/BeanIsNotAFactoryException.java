@@ -1,7 +1,5 @@
 package github.yuanlin.beans.exception;
 
-import github.yuanlin.beans.factory.FactoryBean;
-
 /**
  * 要获取的 bean 不是 FactoryBean，但 getBean("&...") 使用了 FactoryBean 的前缀
  *

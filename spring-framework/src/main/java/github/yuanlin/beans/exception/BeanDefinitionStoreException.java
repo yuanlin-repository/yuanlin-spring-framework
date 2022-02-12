@@ -1,6 +1,8 @@
 package github.yuanlin.beans.exception;
 
 /**
+ * 存储 BeanDefinition 异常
+ *
  * @author yuanlin
  * @date 2022/02/06/20:31
  */

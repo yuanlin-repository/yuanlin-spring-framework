@@ -3,6 +3,8 @@ package github.yuanlin.aop.targetsource;
 import github.yuanlin.aop.TargetSource;
 
 /**
+ * 空目标对象
+ *
  * @author yuanlin
  * @date 2022/02/11/17:27
  */

@@ -4,7 +4,7 @@ import github.yuanlin.aop.ClassFilter;
 import github.yuanlin.aop.MethodMatcher;
 
 /**
- * Spring 的切面抽象，切面中包含 ClassFilter 和 MethodMatcher
+ * 切面抽象，切面中包含 ClassFilter 和 MethodMatcher
  *
  * @author yuanlin
  * @date 2022/02/11/11:57

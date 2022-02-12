@@ -1,6 +1,5 @@
-package github.yuanlin.aop.pointcutadvisor;
+package github.yuanlin.aop.advisor;
 
-import github.yuanlin.aop.advisor.Advisor;
 import github.yuanlin.aop.pointcut.Pointcut;
 
 /**
@@ -10,7 +9,7 @@ import github.yuanlin.aop.pointcut.Pointcut;
 public interface PointcutAdvisor extends Advisor {
 
     /**
-     * @return 驱动该 advisor 的 pointcut
+     * @return 该 advisor 的 pointcut
      */
     Pointcut getPointcut();
 }

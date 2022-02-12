@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 在 BeanFactory 中获取所有 advisor（实现了 Advisor 接口）
+ * 用于在 BeanFactory 中获取所有 advisor（实现了 Advisor 接口）
  *
  * @author yuanlin
  * @date 2022/02/12/16:57

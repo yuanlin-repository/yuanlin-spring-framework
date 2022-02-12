@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Repository 注解
+ * 标识当前类是一个 bean
  *
  * @author yuanlin
  * @date 2022/02/05/20:54

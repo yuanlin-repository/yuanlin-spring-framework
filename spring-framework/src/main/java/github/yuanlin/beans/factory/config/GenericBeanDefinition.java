@@ -1,6 +1,8 @@
 package github.yuanlin.beans.factory.config;
 
 /**
+ * 通用 bean 配置信息
+ *
  * @author yuanlin
  * @date 2022/02/05/21:49
  */

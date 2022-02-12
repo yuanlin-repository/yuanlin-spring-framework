@@ -1,6 +1,8 @@
 package github.yuanlin.aop.exception;
 
 /**
+ * 代理执行发生异常
+ *
  * @author yuanlin
  * @date 2022/02/11/21:11
  */

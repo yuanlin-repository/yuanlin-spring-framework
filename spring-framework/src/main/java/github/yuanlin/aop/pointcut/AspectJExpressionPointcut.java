@@ -20,6 +20,7 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
 
     private static final Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<PointcutPrimitive>();
 
+    // AspectJ 表达式，用于匹配类和方法
     private final PointcutExpression pointcutExpression;
 
     static {
