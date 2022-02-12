@@ -9,7 +9,7 @@ import github.yuanlin.beans.factory.BeanFactory;
  * @author yuanlin
  * @date 2022/02/09/19:42
  */
-public interface BeanFactoryAware {
+public interface BeanFactoryAware extends Aware {
 
     void setBeanFactory(BeanFactory beanFactory) throws BeansException;
 }

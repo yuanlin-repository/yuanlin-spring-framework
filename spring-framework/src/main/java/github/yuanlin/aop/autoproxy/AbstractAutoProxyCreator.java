@@ -12,7 +12,7 @@ import github.yuanlin.beans.factory.lifecycle.InitializingBean;
 import github.yuanlin.beans.factory.lifecycle.aware.Aware;
 import github.yuanlin.beans.factory.lifecycle.aware.BeanFactoryAware;
 import github.yuanlin.beans.factory.lifecycle.processor.BeanPostProcessor;
-import org.aopalliance.aop.Advice;
+import github.yuanlin.aop.advice.Advice;
 
 import java.util.ArrayList;
 import java.util.Arrays;

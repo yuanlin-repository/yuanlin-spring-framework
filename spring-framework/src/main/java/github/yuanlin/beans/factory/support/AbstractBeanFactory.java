@@ -241,7 +241,7 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
     }
 
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
-        return null;
+        return doGetBean(name, requiredType);
     }
 
     protected <T> T doGetBean(String beanName, Class<T> requiredType) {
@@ -277,7 +277,9 @@ public abstract class AbstractBeanFactory implements AutowireCapableBeanFactory 
             }
         }
         // 类型判断
-
+        if (requiredType != null && !requiredType.isInstance(bean)) {
+            throw new BeanNotOfRequiredTypeException("bean: " + bean + ", requireType: " + requiredType);
+        }
         return (T) bean;
     }
 

@@ -3,10 +3,15 @@ package github.yuanlin;
 import github.yuanlin.advice.LogArgsAdvice;
 import github.yuanlin.advice.LogResultAdvice;
 import github.yuanlin.advice.LogThrowsAdvice;
+import github.yuanlin.aop.autoproxy.DefaultAdvisorAutoProxyCreator;
 import github.yuanlin.aop.pointcut.AspectJExpressionPointcut;
 import github.yuanlin.aop.pointcutadvisor.AspectJExpressionPointcutAdvisor;
 import github.yuanlin.aop.proxy.ProxyFactory;
 import github.yuanlin.aop.targetsource.SingletonTargetSource;
+import github.yuanlin.beans.factory.lifecycle.aware.Aware;
+import github.yuanlin.beans.factory.lifecycle.aware.BeanFactoryAware;
+import github.yuanlin.context.ApplicationContext;
+import github.yuanlin.context.support.ClassPathXmlApplicationContext;
 import github.yuanlin.model.User;
 import github.yuanlin.service.UserService;
 import github.yuanlin.service.UserServiceImpl;
@@ -20,7 +25,8 @@ import github.yuanlin.service.UserServiceImpl;
 public class TestProxyFactory {
 
     public static void main(String[] args) {
-        testCreateProxy();
+//        testCreateProxy();
+        testAopUnderSpring();
     }
 
     public static void testCreateProxy() {
@@ -57,5 +63,14 @@ public class TestProxyFactory {
         service.createUser("小明", "小", 15);
         User user = service.queryUser();
         service.queryException();
+    }
+
+    public static void testAopUnderSpring() {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-aop.xml");
+        UserService userService = (UserService) applicationContext.getBean("userService");
+        // 测试前置和后置通知
+        userService.createUser("小明", "小", 15);
+        // 测试异常通知
+        userService.queryException();
     }
 }
