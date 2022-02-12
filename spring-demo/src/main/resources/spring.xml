@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userService" class="github.yuanlin.service.UserServiceImpl"/>
+
+    <!--定义两个 advice-->
+    <bean id="logArgsAdvice" class="github.yuanlin.advice.LogArgsAdvice"/>
+    <bean id="logResultAdvice" class="github.yuanlin.advice.LogResultAdvice"/>
+
+    <!-- 通过 AspectJ 表达式来进行匹配 -->
+    <bean id="logArgsAdvisor" class="github.yuanlin.aop.advisor.AspectJExpressionPointcutAdvisor">
+        <property name="advice" ref="logArgsAdvice" />
+        <property name="expression" value="execution(* github.yuanlin.service.UserService.*(..))" />
+    </bean>
+    <bean id="logResultAdvisor" class="github.yuanlin.aop.advisor.AspectJExpressionPointcutAdvisor">
+        <property name="advice" ref="logResultAdvice" />
+        <property name="expression" value="execution(* github.yuanlin.service.UserService.*(..))" />
+    </bean>
+
+    <bean id="defaultAdvisorAutoProxyCreator" class="github.yuanlin.aop.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+</beans>

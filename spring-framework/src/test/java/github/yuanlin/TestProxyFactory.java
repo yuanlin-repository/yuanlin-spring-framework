@@ -67,7 +67,7 @@ public class TestProxyFactory {
         UserService userService = (UserService) applicationContext.getBean("userService");
         // 测试前置和后置通知
         userService.createUser("小明", "小", 15);
-        // 测试异常通知
+        // 测试异常通知（queryException 会抛出异常）
         userService.queryException();
     }
 }

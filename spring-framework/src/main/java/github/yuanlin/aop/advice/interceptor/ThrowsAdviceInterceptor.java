@@ -38,7 +38,7 @@ public class ThrowsAdviceInterceptor implements AfterAdvice, MethodInterceptor {
                 if (Throwable.class.isAssignableFrom(throwableParam)) {
                     // 异常处理器
                     this.exceptionHandlerMap.put(throwableParam, method);
-                    log.info("Found exception handler method on throws advice: [{}], method: [{}]", advice, method);
+//                    log.info("Found exception handler method on throws advice: [{}], method: [{}]", advice, method);
                 }
             }
         }
@@ -82,7 +82,7 @@ public class ThrowsAdviceInterceptor implements AfterAdvice, MethodInterceptor {
             handler = this.exceptionHandlerMap.get(clazz);
         }
         if (handler != null) {
-            log.info("find handler for exception of type: [{}]", clazz);
+//            log.info("find handler for exception of type: [{}]", clazz);
         }
         return handler;
     }
