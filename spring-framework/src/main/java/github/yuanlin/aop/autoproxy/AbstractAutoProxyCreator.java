@@ -43,7 +43,7 @@ public abstract class AbstractAutoProxyCreator implements BeanPostProcessor, Bea
         return bean;
     }
 
-    private Object getCacheKey(Class<?> beanClass, String beanName) {
+    protected Object getCacheKey(Class<?> beanClass, String beanName) {
         if (beanName != null && !beanName.isEmpty()) {
             return (FactoryBean.class.isAssignableFrom(beanClass) ?
                     BeanFactory.FACTORY_BEAN_PREFIX + beanName : beanName);
@@ -52,7 +52,7 @@ public abstract class AbstractAutoProxyCreator implements BeanPostProcessor, Bea
         }
     }
 
-    private Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
+    protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
         // 如果不需要被增强
         if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
             return bean;
@@ -76,7 +76,7 @@ public abstract class AbstractAutoProxyCreator implements BeanPostProcessor, Bea
         return bean;
     }
 
-    private Object createProxy(Class<?> beanClass, String beanName,
+    protected Object createProxy(Class<?> beanClass, String beanName,
                                Object[] specificInterceptors, SingletonTargetSource targetSource) {
         ProxyFactory proxyFactory = new ProxyFactory();
         // 判断 bean 是否有可以被代理的接口

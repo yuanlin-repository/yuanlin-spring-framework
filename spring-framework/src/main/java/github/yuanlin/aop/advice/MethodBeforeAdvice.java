@@ -3,6 +3,8 @@ package github.yuanlin.aop.advice;
 import java.lang.reflect.Method;
 
 /**
+ * 方法执行前通知
+ *
  * @author yuanlin
  * @date 2022/02/11/12:30
  */
